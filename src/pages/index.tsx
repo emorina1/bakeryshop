@@ -1,115 +1,182 @@
+"use client";
 import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { motion } from "framer-motion";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import heroBg from "@/assets/bread1.png";
+import bread1 from "@/assets/bread.png";
+import cakes from "@/assets/cake.png";
+import croissant from "@/assets/croissant.png";
+import pastry from "@/assets/pastry.png";
+import cake from "@/assets/cake.png";
+import coffee from "@/assets/caffe.png";
 
 export default function Home() {
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 30 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  };
+
   return (
-    <div
-      className={`${geistSans.className} ${geistMono.className} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
-    >
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/pages/index.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="font-serif text-[17px] leading-relaxed bg-[#fcf5ee] text-[#3b2e25]">
+  <section className="relative w-full h-[500px] overflow-hidden flex items-center justify-center">
+      {/* Foto në sfond */}
+      <Image
+        src={heroBg}
+        alt="Bakery Background"
+        fill
+        className="object-cover brightness-[0.5]"
+        priority
+      />
+
+      {/* Teksti në mes - pa sfond, vetëm tekst i bardhë */}
+      <motion.div
+        className="absolute z-10 text-white text-center px-4"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+      >
+        <h1 className="text-3xl md:text-5xl font-bold">
+          Freshly Baked, Just for You!
+        </h1>
+        <p className="mt-2 text-lg">From our oven to your heart.</p>
+      </motion.div>
+    </section>
+
+
+      {/* Featured Section */}
+      <motion.section
+        className="py-16 px-4 max-w-6xl mx-auto"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        variants={fadeInUp}
+      >
+        <h2 className="text-3xl font-bold text-center mb-12 text-[#4a2e21]">
+          Featured
+        </h2>
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <motion.div className="relative h-72 w-full overflow-hidden rounded-xl shadow-md" variants={fadeInUp}>
+            <Image
+              src={bread1}
+              alt="Pastries"
+              fill
+              className="object-cover hover:scale-105 transition-transform duration-300"
+            />
+          </motion.div>
+          <motion.div variants={fadeInUp}>
+            <h3 className="text-2xl font-bold mb-2 text-[#5e3e2f]">Delicious Pastries</h3>
+            <p className="text-[#7d5f4a]">
+              Enjoy our handmade pastries, crafted fresh every morning with love.
+            </p>
+          </motion.div>
+
+          <motion.div className="order-2 md:order-1" variants={fadeInUp}>
+            <h3 className="text-2xl font-bold mb-2 text-[#5e3e2f]">Fresh Cakes</h3>
+            <p className="text-[#7d5f4a]">
+              Treat yourself to our soft, rich cakes made from high-quality ingredients.
+            </p>
+          </motion.div>
+          <motion.div
+            className="relative h-72 w-full overflow-hidden rounded-xl shadow-md order-1 md:order-2"
+            variants={fadeInUp}
           >
             <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+              src={cakes}
+              alt="Cakes"
+              fill
+              className="object-cover hover:scale-105 transition-transform duration-300"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          </motion.div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      </motion.section>
+
+      {/* Why Choose Us Section */}
+      <motion.section
+        className="bg-[#f4e9df] py-16 px-4"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        variants={fadeInUp}
+      >
+        <h2 className="text-3xl font-bold text-center mb-12 text-[#4a2e21]">
+          Why Choose Us?
+        </h2>
+        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {[
+            {
+              title: "Artisan Breads",
+              image: croissant,
+              description: "Handcrafted using traditional recipes and natural ingredients.",
+            },
+            {
+              title: "Sweet Pastries",
+              image: pastry,
+              description: "A delicious variety of pastries made fresh daily.",
+            },
+            {
+              title: "Custom Cakes",
+              image: cake,
+              description: "Celebrate with personalized cakes for every occasion.",
+            },
+          ].map(({ title, image, description }, i) => (
+            <motion.div
+              key={title}
+              className="bg-white p-6 rounded-lg shadow-lg text-center hover:shadow-xl transition-shadow duration-300"
+              variants={fadeInUp}
+            >
+              <div className="relative h-44 w-full mb-4">
+                <Image src={image} alt={title} fill className="rounded-md object-cover" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2 text-[#5e3e2f]">{title}</h3>
+              <p className="text-sm text-[#7d5f4a]">{description}</p>
+            </motion.div>
+          ))}
+        </div>
+      </motion.section>
+
+      {/* Our Creations Gallery */}
+      <motion.section
+        className="py-16 px-4 max-w-6xl mx-auto"
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        variants={fadeInUp}
+      >
+        <h2 className="text-3xl font-bold text-center mb-12 text-[#4a2e21]">
+          Our Creations
+        </h2>
+        <Swiper
+          modules={[Pagination, Autoplay]}
+          spaceBetween={20}
+          slidesPerView={1}
+          pagination={{ clickable: true }}
+          autoplay={{ delay: 4000 }}
+          breakpoints={{
+            640: { slidesPerView: 1 },
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+          }}
+          className="rounded-xl"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          {[cakes, croissant, bread1, coffee].map((img, i) => (
+            <SwiperSlide key={i}>
+              <div className="relative h-64 w-full overflow-hidden rounded-xl shadow-md hover:scale-105 transition-transform duration-300">
+                <Image
+                  src={img}
+                  alt={`Gallery image ${i}`}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </motion.section>
     </div>
   );
 }
