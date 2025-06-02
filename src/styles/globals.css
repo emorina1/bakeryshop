@@ -2,6 +2,10 @@
 @import "swiper/css";
 @import "swiper/css/navigation";
 @import "swiper/css/pagination";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 
 /* Variablat themelore për ngjyra */
 :root {
@@ -9,11 +13,8 @@
   --foreground: #171717;
 }
 
-/* Tema inline për Tailwind (opsionale nëse ke shfrytëzim me plugin të avancuar) */
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-}
+
+
 
 /* Dark mode automatik */
 @media (prefers-color-scheme: dark) {

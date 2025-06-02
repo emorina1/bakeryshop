@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
+import Footer from "@/components/Footer";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import { motion } from "framer-motion";
 import "swiper/css";
@@ -23,30 +24,28 @@ export default function Home() {
 
   return (
     <div className="font-serif text-[17px] leading-relaxed bg-[#fcf5ee] text-[#3b2e25]">
-  <section className="relative w-full h-[500px] overflow-hidden flex items-center justify-center">
-      {/* Foto në sfond */}
-      <Image
-        src={heroBg}
-        alt="Bakery Background"
-        fill
-        className="object-cover brightness-[0.5]"
-        priority
-      />
+      {/* Hero Section pa overlay */}
+      <section className="relative w-full h-[600px] flex items-center justify-center overflow-hidden">
+        <Image
+          src={heroBg}
+          alt="Bakery Background"
+          fill
+          className="object-cover brightness-100"
+          priority
+        />
 
-      {/* Teksti në mes - pa sfond, vetëm tekst i bardhë */}
-      <motion.div
-        className="absolute z-10 text-white text-center px-4"
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-      >
-        <h1 className="text-3xl md:text-5xl font-bold">
-          Freshly Baked, Just for You!
-        </h1>
-        <p className="mt-2 text-lg">From our oven to your heart.</p>
-      </motion.div>
-    </section>
-
+        <motion.div
+          className="absolute z-10 text-white text-center px-8 max-w-3xl"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+        >
+        <h1 className="text-5xl md:text-6xl font-extrabold drop-shadow-lg leading-tight whitespace-nowrap">
+         Freshly Baked, Just for You!
+         </h1>
+        
+        </motion.div>
+      </section>
 
       {/* Featured Section */}
       <motion.section
@@ -60,7 +59,10 @@ export default function Home() {
           Featured
         </h2>
         <div className="grid md:grid-cols-2 gap-8 items-center">
-          <motion.div className="relative h-72 w-full overflow-hidden rounded-xl shadow-md" variants={fadeInUp}>
+          <motion.div
+            className="relative h-72 w-full overflow-hidden rounded-xl shadow-md"
+            variants={fadeInUp}
+          >
             <Image
               src={bread1}
               alt="Pastries"
@@ -69,7 +71,9 @@ export default function Home() {
             />
           </motion.div>
           <motion.div variants={fadeInUp}>
-            <h3 className="text-2xl font-bold mb-2 text-[#5e3e2f]">Delicious Pastries</h3>
+            <h3 className="text-2xl font-bold mb-2 text-[#5e3e2f]">
+              Delicious Pastries
+            </h3>
             <p className="text-[#7d5f4a]">
               Enjoy our handmade pastries, crafted fresh every morning with love.
             </p>
@@ -111,7 +115,8 @@ export default function Home() {
             {
               title: "Artisan Breads",
               image: croissant,
-              description: "Handcrafted using traditional recipes and natural ingredients.",
+              description:
+                "Handcrafted using traditional recipes and natural ingredients.",
             },
             {
               title: "Sweet Pastries",
@@ -123,14 +128,19 @@ export default function Home() {
               image: cake,
               description: "Celebrate with personalized cakes for every occasion.",
             },
-          ].map(({ title, image, description }, i) => (
+          ].map(({ title, image, description }) => (
             <motion.div
               key={title}
               className="bg-white p-6 rounded-lg shadow-lg text-center hover:shadow-xl transition-shadow duration-300"
               variants={fadeInUp}
             >
               <div className="relative h-44 w-full mb-4">
-                <Image src={image} alt={title} fill className="rounded-md object-cover" />
+                <Image
+                  src={image}
+                  alt={title}
+                  fill
+                  className="rounded-md object-cover"
+                />
               </div>
               <h3 className="text-xl font-semibold mb-2 text-[#5e3e2f]">{title}</h3>
               <p className="text-sm text-[#7d5f4a]">{description}</p>
@@ -166,17 +176,15 @@ export default function Home() {
           {[cakes, croissant, bread1, coffee].map((img, i) => (
             <SwiperSlide key={i}>
               <div className="relative h-64 w-full overflow-hidden rounded-xl shadow-md hover:scale-105 transition-transform duration-300">
-                <Image
-                  src={img}
-                  alt={`Gallery image ${i}`}
-                  fill
-                  className="object-cover"
-                />
+                <Image src={img} alt={`Gallery image ${i}`} fill className="object-cover" />
               </div>
             </SwiperSlide>
           ))}
         </Swiper>
       </motion.section>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
