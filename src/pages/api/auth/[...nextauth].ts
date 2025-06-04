@@ -1,13 +1,12 @@
-// import NextAuth from "next-auth";
-// import Providers from "next-auth/providers";
+import NextAuth from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
 
-// export default NextAuth({
-//   providers: [
-//     Providers.Google({
-//       clientId: process.env.GOOGLE_CLIENT_ID,
-//       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//     }),
-//     // mund të shtosh edhe provider të tjerë
-//   ],
-//   // opsione të tjera të konfigurimit (database, callbacks, etj)
-// });
+export default NextAuth({
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+  ],
+  // opsione të tjera konfigurimi (nëse ke)
+});
