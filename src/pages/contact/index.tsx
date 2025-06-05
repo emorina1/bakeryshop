@@ -3,8 +3,7 @@ import Head from "next/head";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Image from "next/image";
-import bgImage from "@/assets/bg.png";
-import bakeryImage from "@/assets/croissant.png"; // sigurohu që fotoja ekziston në këtë path
+import bgImage from "@/assets/bg.png"; // background image që ke përdorur më herët
 
 export default function ContactPage() {
   const [name, setName] = useState("");
@@ -24,7 +23,9 @@ export default function ContactPage() {
       });
 
       if (res.ok) {
-        toast.success("Message sent successfully!");
+        toast.success("Message sent successfully!", {
+          className: "bg-green-600 text-white font-semibold rounded-md",
+        });
         setName("");
         setEmail("");
         setMessage("");
@@ -42,65 +43,54 @@ export default function ContactPage() {
   return (
     <>
       <Head>
-        <title>Contact Us | Bakery Shop</title>
+        <title>Contact Us | Cake Shop</title>
       </Head>
 
-        <div
-      className="min-h-screen flex items-center justify-center px-4 py-16 bg-cover bg-center"
-      style={{ backgroundImage: `url(${bgImage.src})` }}
-    >
+      <div
+        className="min-h-screen flex items-center justify-center px-4 py-16 bg-cover bg-center"
+        style={{ backgroundImage: `url(${bgImage.src})` }}
+      >
+        <div className="max-w-4xl w-full bg-white rounded-lg shadow-lg p-10 md:flex md:gap-8">
+          <div className="flex-1">
+            <h1 className="text-3xl font-bold text-gray-800 mb-6">Contact Form</h1>
+            <form onSubmit={handleSubmit}>
+              <label className="block mb-2 text-sm font-medium text-gray-700">Your Name</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                placeholder="Enter your name"
+                className="w-full mb-4 px-4 py-2 border border-gray-300 rounded"
+              />
 
+              <label className="block mb-2 text-sm font-medium text-gray-700">Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="Enter your email"
+                className="w-full mb-4 px-4 py-2 border border-gray-300 rounded"
+              />
 
-        {/* sfond kaftë i lehtë (tan color) */}
-        <div className="max-w-6xl w-full bg-white rounded-xl shadow-lg flex flex-col md:flex-row overflow-hidden">
-          {/* Form Section */}
-          <div className="md:w-1/2 p-10">
-            <h1 className="text-3xl font-extrabold text-[#7B4B1B] mb-8 text-center">Get in Touch</h1>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block mb-2 font-semibold text-[#7B4B1B]">Your Name</label>
-                <input
-                  id="name"
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                  placeholder="Enter your name"
-                  className="w-full px-4 py-3 border border-[#C49E67] rounded-md focus:outline-none focus:ring-2 focus:ring-[#A67B5B] text-[#5C3A00]"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block mb-2 font-semibold text-[#7B4B1B]">Email Address</label>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  placeholder="Enter your email"
-                  className="w-full px-4 py-3 border border-[#C49E67] rounded-md focus:outline-none focus:ring-2 focus:ring-[#A67B5B] text-[#5C3A00]"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="message" className="block mb-2 font-semibold text-[#7B4B1B]">Message</label>
-                <textarea
-                  id="message"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  required
-                  placeholder="Write your message here..."
-                  rows={5}
-                  className="w-full px-4 py-3 border border-[#C49E67] rounded-md focus:outline-none focus:ring-2 focus:ring-[#A67B5B] text-[#5C3A00]"
-                />
-              </div>
+              <label className="block mb-2 text-sm font-medium text-gray-700">Message</label>
+              <textarea
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                required
+                placeholder="Type your message"
+                rows={4}
+                className="w-full mb-6 px-4 py-2 border border-gray-300 rounded"
+              />
 
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full py-3 rounded-lg font-bold text-white transition ${
-                  loading ? "bg-[#CBB994] cursor-not-allowed" : "bg-[#7B4B1B] hover:bg-[#6B3E13]"
+                className={`w-full py-3 rounded-md text-white font-semibold transition ${
+                  loading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-gray-800 hover:bg-gray-700"
                 }`}
               >
                 {loading ? "Sending..." : "Send Message"}
@@ -108,24 +98,20 @@ export default function ContactPage() {
             </form>
           </div>
 
-          {/* Image Section */}
-          <div className="md:w-1/2 relative hidden md:block">
+          {/* Optional Image section */}
+          <div className="flex-1 hidden md:block relative">
             <Image
-              src={bakeryImage}
-              alt="Bakery Shop"
+              src={bgImage}
+              alt="Bakery Contact"
               fill
-              className="object-cover"
+              className="object-cover rounded-lg"
               priority
             />
           </div>
         </div>
       </div>
 
-      <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        theme="colored"
-      />
+      <ToastContainer position="top-center" autoClose={3000} theme="colored" />
     </>
   );
 }

@@ -15,11 +15,6 @@ export default function CreateProduct() {
   const { post } = useFetch<Product[]>("/api/products");
 
   const handleCreate = async () => {
-    if (!newProduct.title || !newProduct.body || !newProduct.price) {
-      alert("Please fill in all required fields.");
-      return;
-    }
-
     try {
       const result = await post(newProduct);
       console.log("✅ Product created:", result);

@@ -2,6 +2,7 @@ import { CircularProgress } from "@mui/material";
 import useFetch from "hooks/useFetch";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { Product } from "@/api/models/Product";
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -41,7 +42,7 @@ export default function Products() {
     localStorage.setItem("cart", JSON.stringify(updatedCart));
 
     toast("✅ Added to your cart", {
-      className: "bg-pink-600 text-white font-semibold rounded-lg shadow-lg",
+      className: "bg-[#5A3E36] text-white font-semibold rounded-lg shadow-lg",
     });
 
     setTimeout(() => {
@@ -59,8 +60,11 @@ export default function Products() {
         {productsLoading ? (
           <CircularProgress />
         ) : (
-          <div className="bg-pink-50 py-16 px-4 w-full">
-            <h1 className="text-5xl font-bold text-center text-pink-800 mb-16">
+          <div className="bg-[#F4EDE7] py-16 px-4 w-full">
+            <h1
+              className="text-5xl font-bold text-center mb-16"
+              style={{ color: "#5A3E36" }}
+            >
               Try Our Fresh Products
             </h1>
 
@@ -74,24 +78,29 @@ export default function Products() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <div className="w-full h-48 bg-pink-100 rounded-xl flex items-center justify-center mb-6 overflow-hidden">
+                    <div className="w-full h-48 rounded-xl flex items-center justify-center mb-6 overflow-hidden bg-[#F4EDE7]">
                       {product.image ? (
-                        <img
-                          src={product.image}
+                        <Image
+                          src={`/uploads/${product.image}`} // Rruga me slash në fillim
                           alt={product.title}
-                          className="object-contain max-h-full max-w-full"
+                          width={200}
+                          height={180}
+                          objectFit="contain"
+                          className="rounded-xl"
                         />
                       ) : (
                         <span className="text-4xl">🍰</span>
                       )}
                     </div>
-                    <h2 className="text-2xl font-bold text-pink-700 mb-2 uppercase">
+
+                    <h2 className="text-2xl font-bold text-[#5A3E36] mb-2 uppercase">
                       {product.title}
                     </h2>
+
                     <p className="text-gray-500 mb-4">{product.body}</p>
 
                     {product.price ? (
-                      <p className="text-pink-800 font-bold mb-4">~ {product.price}€</p>
+                      <p className="text-[#5A3E36] font-bold mb-4">~ {product.price}€</p>
                     ) : (
                       <p className="text-gray-400 italic mb-4">Price not available</p>
                     )}
@@ -99,7 +108,7 @@ export default function Products() {
                     {!isAdmin && (
                       <button
                         onClick={() => handleAddToCart(product)}
-                        className="bg-pink-500 hover:bg-pink-700 text-white px-6 py-2 rounded-full mb-4 font-semibold transition"
+                        className="bg-[#5A3E36] hover:bg-[#4b3029] text-white px-6 py-2 rounded-full mb-4 font-semibold transition"
                       >
                         Add to Cart
                       </button>
@@ -108,13 +117,13 @@ export default function Products() {
                     {isAdmin && product.id !== undefined && (
                       <div className="flex justify-center gap-4">
                         <Link href={`/update/product/${product.id}`}>
-                          <button className="bg-[#E6007E] hover:bg-pink-800 text-white rounded-full px-5 py-2 font-semibold transition">
+                          <button className="bg-[#7B4A2A] hover:bg-[#5A3E36] text-white rounded-full px-5 py-2 font-semibold transition">
                             Update
                           </button>
                         </Link>
                         <button
                           onClick={() => handleDeleteProduct(product.id!)}
-                          className="bg-[#E6007E] hover:bg-pink-800 text-white rounded-full px-5 py-2 font-semibold transition"
+                          className="bg-[#7B4A2A] hover:bg-[#5A3E36] text-white rounded-full px-5 py-2 font-semibold transition"
                         >
                           Delete
                         </button>
@@ -132,7 +141,7 @@ export default function Products() {
             {isAdmin && (
               <div className="text-center mt-16">
                 <Link href="/create/product">
-                  <button className="bg-pink-600 hover:bg-pink-700 text-white font-semibold px-8 py-3 rounded-full shadow-md transition">
+                  <button className="bg-[#5A3E36] hover:bg-[#4b3029] text-white font-semibold px-8 py-3 rounded-full shadow-md transition">
                     Create Product
                   </button>
                 </Link>
