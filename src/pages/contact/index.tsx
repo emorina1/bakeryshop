@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Image from "next/image";
 import bgImage from "@/assets/bg.png"; // background image që ke përdorur më herët
+import foto from "@/assets/croissant.png";
 
 export default function ContactPage() {
   const [name, setName] = useState("");
@@ -99,15 +100,17 @@ export default function ContactPage() {
           </div>
 
           {/* Optional Image section */}
-          <div className="flex-1 hidden md:block relative">
-            <Image
-              src={bgImage}
-              alt="Bakery Contact"
-              fill
-              className="object-cover rounded-lg"
-              priority
-            />
-          </div>
+          {/* Optional Image section */}
+<div className="flex-1 hidden md:block relative h-100px"> {/* Zmadhim në 400px */}
+  <Image
+    src={foto}             // vendosim imazhin croissant.png këtu
+    alt="Croissant"
+    fill
+    className="object-cover rounded-lg"
+    priority
+  />
+</div>
+
         </div>
       </div>
 

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useSession, signOut } from "next-auth/react";
 import { useState } from "react";
 import cs from "classnames";
-import Logo from "@/assets/logo.png";
+// import Logo from "@/assets/logo.png";
 import { Menu, X, ShoppingCart } from "lucide-react";
 
 export function Header() {
@@ -31,9 +31,9 @@ export function Header() {
     <div className="py-3 fixed z-50 bg-[#fff0f0] border-b border-pink-200 w-full shadow-md transition-all duration-300 font-serif">
       <div className="container mx-auto flex items-center justify-between px-6">
         {/* Logo */}
-        <Link href="/" onClick={closeMenu}>
+        {/* <Link href="/" onClick={closeMenu}>
           <Image src={Logo} alt="Bakery Logo" width={48} height={48} className="drop-shadow-md" />
-        </Link>
+        </Link> */}
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex flex-1 gap-10 items-center justify-center">

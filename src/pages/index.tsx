@@ -8,7 +8,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-import heroBg from "@/assets/bread1.png";
+import heroBg from "@/assets/bake.jpg";
 import bread1 from "@/assets/bread.png";
 import cakes from "@/assets/cake.png";
 import croissant from "@/assets/croissant.png";
@@ -23,77 +23,82 @@ export default function Home() {
   };
 
   return (
-    <div className="font-serif text-[17px] leading-relaxed bg-[#fcf5ee] text-[#3b2e25]">
-      {/* Hero Section pa overlay */}
-      <section className="relative w-full h-[600px] flex items-center justify-center overflow-hidden">
+    <div className="font-serif text-[18px] leading-relaxed bg-[#fcf5ee] text-[#3b2e25]">
+      {/* Hero Section */}
+      <section className="relative w-full h-[650px] flex items-center justify-center overflow-hidden">
         <Image
           src={heroBg}
           alt="Bakery Background"
           fill
-          className="object-cover brightness-100"
+          className="object-cover brightness-95"
           priority
         />
-
         <motion.div
-          className="absolute z-10 text-white text-center px-8 max-w-3xl"
+          className="absolute z-10 text-white text-center px-8 max-w-4xl"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
-        <h1 className="text-5xl md:text-6xl font-extrabold drop-shadow-lg leading-tight whitespace-nowrap">
-         Freshly Baked, Just for You!
-         </h1>
-        
+   <h1
+  className="text-5xl md:text-7xl font-extrabold leading-tight drop-shadow-[3px_3px_4px_#5c4033]"
+  style={{ marginLeft: '100px' }}
+>
+  Freshly Baked, Just for You!
+</h1>
+
+
         </motion.div>
       </section>
 
       {/* Featured Section */}
       <motion.section
-        className="py-16 px-4 max-w-6xl mx-auto"
+        className="py-20 px-6 max-w-6xl mx-auto"
         initial="hidden"
         whileInView="show"
         viewport={{ once: true }}
         variants={fadeInUp}
       >
-        <h2 className="text-3xl font-bold text-center mb-12 text-[#4a2e21]">
+        <h2 className="text-4xl font-bold text-center mb-14 text-[#4a2e21]">
           Featured
         </h2>
-        <div className="grid md:grid-cols-2 gap-8 items-center">
+        <div className="grid md:grid-cols-2 gap-10 items-center">
           <motion.div
-            className="relative h-72 w-full overflow-hidden rounded-xl shadow-md"
+            className="relative h-80 w-full overflow-hidden rounded-2xl shadow-lg"
             variants={fadeInUp}
           >
             <Image
               src={bread1}
               alt="Pastries"
               fill
-              className="object-cover hover:scale-105 transition-transform duration-300"
+              className="object-cover hover:scale-110 transition-transform duration-300"
             />
           </motion.div>
           <motion.div variants={fadeInUp}>
-            <h3 className="text-2xl font-bold mb-2 text-[#5e3e2f]">
+            <h3 className="text-3xl font-bold mb-3 text-[#5e3e2f]">
               Delicious Pastries
             </h3>
-            <p className="text-[#7d5f4a]">
+            <p className="text-lg text-[#7d5f4a]">
               Enjoy our handmade pastries, crafted fresh every morning with love.
             </p>
           </motion.div>
 
           <motion.div className="order-2 md:order-1" variants={fadeInUp}>
-            <h3 className="text-2xl font-bold mb-2 text-[#5e3e2f]">Fresh Cakes</h3>
-            <p className="text-[#7d5f4a]">
+            <h3 className="text-3xl font-bold mb-3 text-[#5e3e2f]">
+              Fresh Cakes
+            </h3>
+            <p className="text-lg text-[#7d5f4a]">
               Treat yourself to our soft, rich cakes made from high-quality ingredients.
             </p>
           </motion.div>
           <motion.div
-            className="relative h-72 w-full overflow-hidden rounded-xl shadow-md order-1 md:order-2"
+            className="relative h-80 w-full overflow-hidden rounded-2xl shadow-lg order-1 md:order-2"
             variants={fadeInUp}
           >
             <Image
               src={cakes}
               alt="Cakes"
               fill
-              className="object-cover hover:scale-105 transition-transform duration-300"
+              className="object-cover hover:scale-110 transition-transform duration-300"
             />
           </motion.div>
         </div>
@@ -101,16 +106,16 @@ export default function Home() {
 
       {/* Why Choose Us Section */}
       <motion.section
-        className="bg-[#f4e9df] py-16 px-4"
+        className="bg-[#f4e9df] py-20 px-6"
         initial="hidden"
         whileInView="show"
         viewport={{ once: true }}
         variants={fadeInUp}
       >
-        <h2 className="text-3xl font-bold text-center mb-12 text-[#4a2e21]">
+        <h2 className="text-4xl font-bold text-center mb-14 text-[#4a2e21]">
           Why Choose Us?
         </h2>
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-10 max-w-6xl mx-auto">
           {[
             {
               title: "Artisan Breads",
@@ -131,19 +136,19 @@ export default function Home() {
           ].map(({ title, image, description }) => (
             <motion.div
               key={title}
-              className="bg-white p-6 rounded-lg shadow-lg text-center hover:shadow-xl transition-shadow duration-300"
+              className="bg-white p-6 rounded-xl shadow-xl text-center hover:shadow-2xl transition duration-300"
               variants={fadeInUp}
             >
-              <div className="relative h-44 w-full mb-4">
+              <div className="relative h-48 w-full mb-5">
                 <Image
                   src={image}
                   alt={title}
                   fill
-                  className="rounded-md object-cover"
+                  className="rounded-lg object-cover"
                 />
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-[#5e3e2f]">{title}</h3>
-              <p className="text-sm text-[#7d5f4a]">{description}</p>
+              <h3 className="text-2xl font-semibold mb-2 text-[#5e3e2f]">{title}</h3>
+              <p className="text-md text-[#7d5f4a]">{description}</p>
             </motion.div>
           ))}
         </div>
@@ -151,13 +156,13 @@ export default function Home() {
 
       {/* Our Creations Gallery */}
       <motion.section
-        className="py-16 px-4 max-w-6xl mx-auto"
+        className="py-20 px-6 max-w-6xl mx-auto"
         initial="hidden"
         whileInView="show"
         viewport={{ once: true }}
         variants={fadeInUp}
       >
-        <h2 className="text-3xl font-bold text-center mb-12 text-[#4a2e21]">
+        <h2 className="text-4xl font-bold text-center mb-14 text-[#4a2e21]">
           Our Creations
         </h2>
         <Swiper
@@ -175,8 +180,13 @@ export default function Home() {
         >
           {[cakes, croissant, bread1, coffee].map((img, i) => (
             <SwiperSlide key={i}>
-              <div className="relative h-64 w-full overflow-hidden rounded-xl shadow-md hover:scale-105 transition-transform duration-300">
-                <Image src={img} alt={`Gallery image ${i}`} fill className="object-cover" />
+              <div className="relative h-72 w-full overflow-hidden rounded-xl shadow-lg hover:scale-105 transition-transform duration-300">
+                <Image
+                  src={img}
+                  alt={`Gallery image ${i}`}
+                  fill
+                  className="object-cover"
+                />
               </div>
             </SwiperSlide>
           ))}
