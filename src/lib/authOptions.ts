@@ -21,7 +21,7 @@ export const authOptions: NextAuthOptions = {
         if (!isValid) return null;
 
         return {
-          id: String(user.id), // Sigurohu që kjo është `id`, jo `user_id`
+          id: String(user.id),
           name: user.name,
           email: user.email,
           role: user.role,

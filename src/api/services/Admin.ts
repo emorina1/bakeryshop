@@ -1,17 +1,24 @@
 // src/api/services/Admin.ts
-import clientPromise from "@/lib/mysql";
+import db from "@/lib/mysql";
 
-// Merr të gjithë përdoruesit nga tabela `users`
 export async function getAllUsers() {
-  const conn = await clientPromise;
-  const [rows] = await conn.execute("SELECT * FROM users");
-  return rows as any[]; // mund të shtosh tipin User[] nëse e ke të definuar
+  const [rows] = await db.execute("SELECT id, name, email, role FROM users");
+  return rows as { id: number; name: string; email: string; role: string }[];
 }
 
-// Merr numrin total të recetave nga tabela `recipes`
 export async function getTotalRecipes() {
-  const conn = await clientPromise;
-  const [rows] = await conn.execute("SELECT COUNT(*) AS count FROM recipes");
-  const count = Array.isArray(rows) && rows.length > 0 ? (rows[0] as any).count : 0;
-  return count;
+  const [rows] = await db.execute("SELECT COUNT(*) AS count FROM recipes");
+  return Array.isArray(rows) && rows.length > 0 ? (rows[0] as any).count : 0;
+}
+
+export async function getTotalProducts() {
+  const [rows] = await db.execute("SELECT COUNT(*) AS count FROM products");
+  return Array.isArray(rows) && rows.length > 0 ? (rows[0] as any).count : 0;
+}
+
+export async function getAllMessages() {
+  const [rows] = await db.execute(
+    "SELECT id, name, email, message, createdAt FROM messages ORDER BY createdAt DESC"
+  );
+  return rows as { id: number; name: string; email: string; message: string; createdAt: string }[];
 }

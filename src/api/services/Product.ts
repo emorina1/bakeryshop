@@ -1,6 +1,7 @@
 	import db from "@/lib/mysql";
 import { Product } from "@/models/Product";
 import type { RowDataPacket, ResultSetHeader } from "mysql2";
+import clientPromise from "@/lib/mysql";
 
 // Merr të gjithë produktet
 export async function getProducts(): Promise<Product[]> {
@@ -36,6 +37,16 @@ export async function updateProduct(id: string, product: Product) {
   );
   return { id, ...product };
 }
+
+
+export async function getTotalProducts() {
+  const conn = await clientPromise;
+  const [rows] = await conn.execute("SELECT COUNT(*) AS count FROM products");
+  return Array.isArray(rows) && rows.length > 0 ? (rows[0] as any).count : 0;
+}
+
+// Mund të eksportosh edhe funksione të tjera për produktet
+
 
 // Fshin produkt
 export async function deleteProduct(id: string) {
