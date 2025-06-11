@@ -20,7 +20,6 @@ export function Header() {
     { name: "Contact", pathName: "/contact" },
     { name: "Products", pathName: "/products" },
     { name: "Events", pathName: "/events" },
-    { name: "Recipes", pathName: "/recipes" },
     { name: "Cart", pathName: "/cart" }, // kjo mundet të mbetet për mobile menu
   ];
 

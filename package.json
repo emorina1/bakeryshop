@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.14.0",
     "@mui/material": "^7.1.1",
     "@types/formidable": "^3.4.5",
+    "bcryptjs": "^3.0.2",
     "classnames": "^2.5.1",
     "formidable": "^3.5.4",
     "framer-motion": "^12.16.0",
