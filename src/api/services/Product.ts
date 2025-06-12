@@ -1,24 +1,29 @@
-	import db from "@/lib/mysql";
-import { Product } from "@/models/Product";
+import db from "@/lib/mysql";
 import type { RowDataPacket, ResultSetHeader } from "mysql2";
-import clientPromise from "@/lib/mysql";
 
-// Merr të gjithë produktet
-export async function getProducts(): Promise<Product[]> {
-  const [rows] = await db.query<RowDataPacket[]>("SELECT * FROM products");
+export interface Product {
+  id?: number;
+  title: string;
+  body: string;
+  image?: string;
+  price?: number;
+}
+
+export async function getAllProducts(): Promise<Product[]> {
+  const [rows] = await db.query<RowDataPacket[]>(
+    "SELECT id, title, body, image, price FROM products"
+  );
   return rows as Product[];
 }
 
-// Merr një produkt sipas ID
 export async function getProduct(id: string): Promise<Product | undefined> {
   const [rows] = await db.query<RowDataPacket[]>(
-    "SELECT * FROM products WHERE id = ?",
+    "SELECT id, title, body, image, price FROM products WHERE id = ?",
     [id]
   );
   return rows[0] as Product | undefined;
 }
 
-// Krijon produkt
 export async function createProduct(product: Product) {
   const { title, body, image, price } = product;
   const [result] = await db.query<ResultSetHeader>(
@@ -28,7 +33,6 @@ export async function createProduct(product: Product) {
   return { id: result.insertId, ...product };
 }
 
-// Përditëson produkt
 export async function updateProduct(id: string, product: Product) {
   const { title, body, image, price } = product;
   await db.query(
@@ -38,17 +42,13 @@ export async function updateProduct(id: string, product: Product) {
   return { id, ...product };
 }
 
-
-export async function getTotalProducts() {
-  const conn = await clientPromise;
-  const [rows] = await conn.execute("SELECT COUNT(*) AS count FROM products");
-  return Array.isArray(rows) && rows.length > 0 ? (rows[0] as any).count : 0;
+export async function getTotalProducts(): Promise<number> {
+  const [rows] = await db.query<RowDataPacket[]>(
+    "SELECT COUNT(*) AS count FROM products"
+  );
+  return rows.length > 0 ? (rows[0] as any).count : 0;
 }
 
-// Mund të eksportosh edhe funksione të tjera për produktet
-
-
-// Fshin produkt
 export async function deleteProduct(id: string) {
   await db.query("DELETE FROM products WHERE id = ?", [id]);
   return { message: `Product ${id} deleted.` };

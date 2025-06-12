@@ -12,6 +12,11 @@ export function Header() {
   const router = useRouter();
   const pathname = router.pathname;
 
+  // Mos shfaq header nese jemi ne /admin ose faqe qe fillon me /admin
+  if (pathname.startsWith("/admin")) {
+    return null;
+  }
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const items = [
@@ -20,7 +25,7 @@ export function Header() {
     { name: "Contact", pathName: "/contact" },
     { name: "Products", pathName: "/products" },
     { name: "Events", pathName: "/events" },
-    { name: "Cart", pathName: "/cart" }, // kjo mundet të mbetet për mobile menu
+    { name: "Cart", pathName: "/cart" }, // vetem mobile menu
   ];
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
@@ -37,7 +42,7 @@ export function Header() {
         {/* Desktop Navigation */}
         <div className="hidden md:flex flex-1 gap-10 items-center justify-center">
           {items
-            .filter((item) => item.name !== "Cart") /* heq Cart nga navigation sepse do e kemi me ikonë */
+            .filter((item) => item.name !== "Cart")
             .map((item) => (
               <Link
                 key={item.pathName}
@@ -96,7 +101,6 @@ export function Header() {
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden px-6 pb-6 flex flex-col gap-4 bg-[#fff0f0] border-t border-pink-200">
-          {/* Cart Icon me tekst */}
           <Link
             href="/cart"
             onClick={closeMenu}

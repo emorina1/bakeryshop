@@ -9,6 +9,7 @@ import Head from "next/head";
 import { useSession } from "next-auth/react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
 
 export default function Products() {
   const { data: session } = useSession();
@@ -21,6 +22,11 @@ export default function Products() {
   } = useFetch<Product[]>("/api/products");
 
   const router = useRouter();
+
+  useEffect(() => {
+    console.log("productsData:", productsData);
+    console.log("isAdmin:", isAdmin);
+  }, [productsData, isAdmin]);
 
   const handleDeleteProduct = async (id: number) => {
     const confirmed = confirm("Are you sure you want to delete this product?");
@@ -81,11 +87,11 @@ export default function Products() {
                     <div className="w-full h-48 rounded-xl flex items-center justify-center mb-6 overflow-hidden bg-[#F4EDE7]">
                       {product.image ? (
                         <Image
-                          src={`/uploads/${product.image}`} // Rruga me slash në fillim
+                          src={`/uploads/${product.image}`}
                           alt={product.title}
                           width={200}
                           height={180}
-                          objectFit="contain"
+                          style={{ objectFit: "contain" }}
                           className="rounded-xl"
                         />
                       ) : (

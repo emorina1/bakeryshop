@@ -6,10 +6,6 @@ export async function getAllUsers() {
   return rows as { id: number; name: string; email: string; role: string }[];
 }
 
-export async function getTotalRecipes() {
-  const [rows] = await db.execute("SELECT COUNT(*) AS count FROM recipes");
-  return Array.isArray(rows) && rows.length > 0 ? (rows[0] as any).count : 0;
-}
 
 export async function getTotalProducts() {
   const [rows] = await db.execute("SELECT COUNT(*) AS count FROM products");
