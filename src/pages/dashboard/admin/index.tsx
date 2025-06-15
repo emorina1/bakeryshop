@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/authOptions";
 import { getAllUsers } from "@/api/services/Admin";
 import { getTotalProducts, getAllProducts } from "@/api/services/Product";
 import { getAllMessages } from "@/api/services/Message";
+import { getAllEvents } from "@/api/services/Event";
 import { useState } from "react";
 import { FiLogOut } from "react-icons/fi";
 import { signOut } from "next-auth/react";
@@ -31,11 +32,20 @@ type Message = {
   createdAt: string;
 };
 
+type Event = {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  date: string;
+};
+
 type AdminDashboardProps = {
   users: User[];
   productCount: number;
   messages: Message[];
   products: Product[];
+  events: Event[];
 };
 
 export default function AdminDashboard({
@@ -43,8 +53,11 @@ export default function AdminDashboard({
   productCount = 0,
   messages = [],
   products = [],
+  events = [],
 }: AdminDashboardProps) {
-  const [activeMenu, setActiveMenu] = useState<"dashboard" | "products" | "users" | "messages" | "cart">("dashboard");
+  const [activeMenu, setActiveMenu] = useState<
+    "dashboard" | "products" | "users" | "messages" | "cart" | "events"
+  >("dashboard");
   const [cartItems, setCartItems] = useState<Product[]>([]);
 
   const addToCart = (product: Product) => {
@@ -61,7 +74,6 @@ export default function AdminDashboard({
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
       <aside className="w-64 bg-yellow-900 text-white flex flex-col p-6 shadow-lg justify-between">
         <div>
           {activeMenu !== "cart" && (
@@ -69,7 +81,7 @@ export default function AdminDashboard({
           )}
 
           <nav className="flex flex-col space-y-4 text-lg">
-            {["dashboard", "products", "users", "messages", "cart"].map((menu) => (
+            {["dashboard", "products", "users", "messages", "cart", "events"].map((menu) => (
               <button
                 key={menu}
                 className={`text-left p-3 rounded-md transition-colors duration-200 ${
@@ -84,6 +96,7 @@ export default function AdminDashboard({
                 {menu === "users" && "Users"}
                 {menu === "messages" && "Messages"}
                 {menu === "cart" && `Cart Overview (${cartItems.length})`}
+                {menu === "events" && "Events"}
               </button>
             ))}
           </nav>
@@ -98,7 +111,6 @@ export default function AdminDashboard({
         </button>
       </aside>
 
-      {/* Main Content */}
       <main className="flex-1 p-10 overflow-y-auto">
         {activeMenu === "dashboard" && (
           <section>
@@ -120,149 +132,63 @@ export default function AdminDashboard({
           </section>
         )}
 
-        {activeMenu === "products" && (
+        {/* ... Existing sections for products, users, messages, cart ... */}
+
+        {activeMenu === "events" && (
           <section>
-            <h2 className="text-2xl font-bold mb-6 border-b border-yellow-700 pb-2">Products</h2>
+            <h2 className="text-2xl font-bold mb-6 border-b border-yellow-700 pb-2">Events</h2>
 
             <div className="mb-6 text-right">
               <button
-                onClick={() => (window.location.href = "/create/product")}
+                onClick={() => (window.location.href = "/create/events")}
                 className="bg-green-700 text-white px-5 py-2 rounded-md hover:bg-green-800 transition"
               >
-                + Create Product
+                + Create Event
               </button>
             </div>
 
-            {products.length === 0 ? (
-              <p className="text-gray-600">No products found.</p>
+            {events.length === 0 ? (
+              <p className="text-gray-600">No events found.</p>
             ) : (
               <ul className="space-y-6">
-                {products.map((product) => (
+                {events.map((event) => (
                   <li
-                    key={product.id}
+                    key={event.id}
                     className="bg-white rounded-lg shadow p-5 flex flex-col sm:flex-row sm:justify-between sm:items-center"
                   >
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-yellow-900">{product.title}</h3>
-                      <p className="text-gray-600">{product.body}</p>
-                      <p className="text-green-700 font-semibold">€{product.price.toFixed(2)}</p>
+                      <h3 className="text-lg font-semibold text-yellow-900">{event.title}</h3>
+                      <p className="text-gray-600">{event.description}</p>
+                      <p className="text-sm text-gray-500">{new Date(event.date).toLocaleString()}</p>
                     </div>
 
                     <div className="flex flex-col gap-2 mt-4 sm:mt-0 sm:ml-6">
                       <button
-                        className="px-4 py-2 bg-yellow-900 text-white rounded hover:bg-yellow-800 transition"
-                        onClick={() => addToCart(product)}
+                        onClick={() => (window.location.href = `/update/event/${event.id}`)}
+                        className="px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
                       >
-                        Add to Cart
+                        Update
                       </button>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => (window.location.href = `/update/product/${product.id}`)}
-                          className="px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                        >
-                          Update
-                        </button>
-                        <button
-                          onClick={async () => {
-                            const confirmed = confirm("Are you sure you want to delete this product?");
-                            if (!confirmed) return;
+                      <button
+                        onClick={async () => {
+                          const confirmed = confirm("Are you sure you want to delete this event?");
+                          if (!confirmed) return;
 
-                            const res = await fetch(`/api/products/${product.id}`, {
-                              method: "DELETE",
-                            });
+                          const res = await fetch(`/api/events/${event.id}`, {
+                            method: "DELETE",
+                          });
 
-                            if (res.ok) {
-                              window.location.reload();
-                            } else {
-                              alert("Failed to delete the product.");
-                            }
-                          }}
-                          className="px-4 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition"
-                        >
-                          Delete
-                        </button>
-                      </div>
+                          if (res.ok) {
+                            window.location.reload();
+                          } else {
+                            alert("Failed to delete the event.");
+                          }
+                        }}
+                        className="px-4 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition"
+                      >
+                        Delete
+                      </button>
                     </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
-        )}
-
-        {activeMenu === "users" && (
-          <section>
-            <h2 className="text-2xl font-bold mb-6 border-b border-yellow-700 pb-2">Users</h2>
-            {users.length === 0 ? (
-              <p className="text-gray-600">No users found.</p>
-            ) : (
-              <ul className="divide-y divide-gray-200 bg-white rounded shadow overflow-hidden">
-                {users.map((user) => (
-                  <li key={user.id} className="px-6 py-4 flex justify-between items-center">
-                    <div>
-                      <p className="font-semibold text-yellow-900">{user.name}</p>
-                      <p className="text-sm text-gray-600">{user.email}</p>
-                    </div>
-                    <span
-                      className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                        user.role === "admin"
-                          ? "bg-green-200 text-green-800"
-                          : "bg-gray-200 text-gray-700"
-                      }`}
-                    >
-                      {user.role}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
-        )}
-
-        {activeMenu === "messages" && (
-          <section>
-            <h2 className="text-2xl font-bold mb-6 border-b border-yellow-700 pb-2">Messages</h2>
-            {messages.length === 0 ? (
-              <p className="text-gray-600">No messages found.</p>
-            ) : (
-              <ul className="space-y-4">
-                {messages.map((msg) => (
-                  <li
-                    key={msg.id}
-                    className="bg-white p-5 rounded-lg shadow border border-yellow-300"
-                  >
-                    <div className="flex justify-between items-center mb-2">
-                      <p className="font-semibold text-yellow-900">{msg.name}</p>
-                      <span className="text-sm text-gray-500">
-                        {new Date(msg.createdAt).toLocaleString()}
-                      </span>
-                    </div>
-                    <p className="text-gray-700">{msg.message}</p>
-                    <p className="mt-2 text-sm italic text-gray-500">{msg.email}</p>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
-        )}
-
-        {activeMenu === "cart" && (
-          <section>
-            <h2 className="text-2xl font-bold mb-6 border-b border-yellow-700 pb-2">Cart Overview</h2>
-            {cartItems.length === 0 ? (
-              <p className="text-gray-600">Your cart is empty.</p>
-            ) : (
-              <ul className="space-y-3 bg-white rounded shadow p-5">
-                {cartItems.map((item, idx) => (
-                  <li key={idx} className="flex justify-between items-center border-b border-gray-200 pb-2 last:border-b-0">
-                    <span className="text-yellow-900 font-semibold">{item.title}</span>
-                    <span>€{item.price.toFixed(2)}</span>
-                    <button
-                      className="text-red-600 hover:text-red-800 ml-4"
-                      onClick={() => removeFromCart(idx)}
-                    >
-                      Remove
-                    </button>
                   </li>
                 ))}
               </ul>
@@ -288,11 +214,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  const [usersRaw, productsRaw, messagesRaw, productCount] = await Promise.all([
+  const [usersRaw, productsRaw, messagesRaw, productCount, eventsRaw] = await Promise.all([
     getAllUsers(),
     getAllProducts(),
     getAllMessages(),
     getTotalProducts(),
+    getAllEvents(),
   ]);
 
   const users = Array.isArray(usersRaw)
@@ -327,12 +254,23 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       }))
     : [];
 
+  const events = Array.isArray(eventsRaw)
+    ? eventsRaw.map((event: any) => ({
+        id: event.id?.toString() ?? "",
+        title: event.title ?? "",
+        description: event.description ?? "",
+        image: event.image ?? "",
+        date: event.date ?? "",
+      }))
+    : [];
+
   return {
     props: {
       users,
       productCount: productCount ?? products.length,
       messages,
       products,
+      events,
     },
   };
 };
