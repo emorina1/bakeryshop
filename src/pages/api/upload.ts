@@ -1,4 +1,3 @@
-// pages/api/upload.ts
 import type { NextApiRequest, NextApiResponse } from "next";
 import formidable from "formidable";
 import fs from "fs";
@@ -6,7 +5,7 @@ import path from "path";
 
 export const config = {
   api: {
-    bodyParser: false,
+    bodyParser: false, // duhet false për të lexuar file upload me formidable
   },
 };
 
@@ -46,14 +45,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const { files } = await parseForm(req);
+    console.log("Files:", files);
+
+    // e merrim file-n që ka emrin "image" nga forma
     const file = Array.isArray(files.image) ? files.image[0] : files.image;
 
     if (!file || !file.filepath) {
       return res.status(400).json({ error: "Image not found or invalid" });
     }
 
+    // marrim vetëm emrin e skedarit për URL
     const fileName = path.basename(file.filepath);
-    const imageUrl = `/uploads/${fileName}`;
+    const imageUrl = `/uploads/${fileName}`; // kjo shkon në /public/uploads
 
     return res.status(200).json({ url: imageUrl });
   } catch (err) {

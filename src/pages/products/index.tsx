@@ -29,8 +29,7 @@ export default function Products() {
   }, [productsData, isAdmin]);
 
   const handleDeleteProduct = async (id: number) => {
-    const confirmed = confirm("Are you sure you want to delete this product?");
-    if (!confirmed) return;
+    if (!confirm("Are you sure you want to delete this product?")) return;
 
     try {
       await remove(`/api/products/${id}`);
@@ -76,24 +75,25 @@ export default function Products() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 max-w-7xl mx-auto">
               {productsData && productsData.length > 0 ? (
-                productsData.map((product: Product) => (
+                productsData.map((product) => (
                   <motion.div
                     key={product.id}
-                    className="bg-white rounded-3xl shadow-xl p-6 text-center hover:scale-105 transition transform duration-300"
+                    className="bg-white rounded-3xl shadow-xl p-6 text-center hover:scale-105 transition-transform duration-300"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                   >
                     <div className="w-full h-48 rounded-xl flex items-center justify-center mb-6 overflow-hidden bg-[#F4EDE7]">
                       {product.image ? (
-                        <Image
-                          src={`/uploads/${product.image}`}
-                          alt={product.title}
-                          width={200}
-                          height={180}
-                          style={{ objectFit: "contain" }}
-                          className="rounded-xl"
-                        />
+                      <Image
+  src={product.image.startsWith('/uploads/') ? product.image : `/uploads/${product.image}`}
+  alt={product.title}
+  width={200}
+  height={180}
+  style={{ objectFit: "contain" }}
+  className="rounded-xl"
+/>
+
                       ) : (
                         <span className="text-4xl">🍰</span>
                       )}

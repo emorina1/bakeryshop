@@ -8,7 +8,6 @@ import { useState } from "react";
 import { FiLogOut } from "react-icons/fi";
 import { signOut } from "next-auth/react";
 
-
 type User = {
   id: string;
   name: string;
@@ -18,8 +17,9 @@ type User = {
 
 type Product = {
   id: string;
-  name: string;
-  description: string;
+  title: string;
+  body: string;
+  image: string;
   price: number;
 };
 
@@ -44,10 +44,7 @@ export default function AdminDashboard({
   messages = [],
   products = [],
 }: AdminDashboardProps) {
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [activeMenu, setActiveMenu] = useState<
-    "dashboard" | "products" | "users" | "messages" | "cart"
-  >("dashboard");
+  const [activeMenu, setActiveMenu] = useState<"dashboard" | "products" | "users" | "messages" | "cart">("dashboard");
   const [cartItems, setCartItems] = useState<Product[]>([]);
 
   const addToCart = (product: Product) => {
@@ -58,9 +55,9 @@ export default function AdminDashboard({
     setCartItems((prev) => prev.filter((_, i) => i !== index));
   };
 
- const handleLogout = () => {
-  signOut({ callbackUrl: "/sign-in" }); // kjo të ridrejton te sign-in pas logout-it
-};
+  const handleLogout = () => {
+    signOut({ callbackUrl: "/sign-in" });
+  };
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -80,10 +77,7 @@ export default function AdminDashboard({
                     ? "bg-yellow-700 font-semibold shadow-inner"
                     : "hover:bg-yellow-800"
                 }`}
-                onClick={() => {
-                  setActiveMenu(menu as any);
-                  setSelectedProduct(null);
-                }}
+                onClick={() => setActiveMenu(menu as any)}
               >
                 {menu === "dashboard" && "Dashboard Overview"}
                 {menu === "products" && "Products"}
@@ -95,26 +89,20 @@ export default function AdminDashboard({
           </nav>
         </div>
 
-        {/* Logout button */}
-      <button
-  onClick={handleLogout}
-  className="flex items-center gap-2 mt-6 p-3 rounded-md bg-red-600 hover:bg-red-700 transition text-white font-semibold"
-  title="Logout"
->
- 
-
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 mt-6 p-3 rounded-md bg-red-600 hover:bg-red-700 transition text-white font-semibold"
+        >
           <FiLogOut size={20} />
           Logout
         </button>
       </aside>
 
-      {/* Main content */}
+      {/* Main Content */}
       <main className="flex-1 p-10 overflow-y-auto">
         {activeMenu === "dashboard" && (
           <section>
-            <h2 className="text-2xl font-bold mb-6 border-b border-yellow-700 pb-2">
-              Dashboard Overview
-            </h2>
+            <h2 className="text-2xl font-bold mb-6 border-b border-yellow-700 pb-2">Dashboard Overview</h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
               <div className="bg-white p-6 rounded-lg shadow-md text-center">
                 <p className="text-xl font-semibold text-yellow-900">{productCount}</p>
@@ -134,9 +122,17 @@ export default function AdminDashboard({
 
         {activeMenu === "products" && (
           <section>
-            <h2 className="text-2xl font-bold mb-6 border-b border-yellow-700 pb-2">
-              Products
-            </h2>
+            <h2 className="text-2xl font-bold mb-6 border-b border-yellow-700 pb-2">Products</h2>
+
+            <div className="mb-6 text-right">
+              <button
+                onClick={() => (window.location.href = "/create/product")}
+                className="bg-green-700 text-white px-5 py-2 rounded-md hover:bg-green-800 transition"
+              >
+                + Create Product
+              </button>
+            </div>
+
             {products.length === 0 ? (
               <p className="text-gray-600">No products found.</p>
             ) : (
@@ -146,17 +142,47 @@ export default function AdminDashboard({
                     key={product.id}
                     className="bg-white rounded-lg shadow p-5 flex flex-col sm:flex-row sm:justify-between sm:items-center"
                   >
-                    <div>
-                      <strong className="text-lg text-yellow-900">{product.name}</strong>{" "}
-                      - <span className="text-gray-700 font-semibold">${product.price.toFixed(2)}</span>
-                      <p className="mt-1 text-gray-600">{product.description}</p>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-yellow-900">{product.title}</h3>
+                      <p className="text-gray-600">{product.body}</p>
+                      <p className="text-green-700 font-semibold">€{product.price.toFixed(2)}</p>
                     </div>
-                    <button
-                      className="mt-4 sm:mt-0 px-4 py-2 bg-yellow-900 text-white rounded-md hover:bg-yellow-800 transition"
-                      onClick={() => addToCart(product)}
-                    >
-                      Add to Cart
-                    </button>
+
+                    <div className="flex flex-col gap-2 mt-4 sm:mt-0 sm:ml-6">
+                      <button
+                        className="px-4 py-2 bg-yellow-900 text-white rounded hover:bg-yellow-800 transition"
+                        onClick={() => addToCart(product)}
+                      >
+                        Add to Cart
+                      </button>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => (window.location.href = `/update/product/${product.id}`)}
+                          className="px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                        >
+                          Update
+                        </button>
+                        <button
+                          onClick={async () => {
+                            const confirmed = confirm("Are you sure you want to delete this product?");
+                            if (!confirmed) return;
+
+                            const res = await fetch(`/api/products/${product.id}`, {
+                              method: "DELETE",
+                            });
+
+                            if (res.ok) {
+                              window.location.reload();
+                            } else {
+                              alert("Failed to delete the product.");
+                            }
+                          }}
+                          className="px-4 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -172,10 +198,7 @@ export default function AdminDashboard({
             ) : (
               <ul className="divide-y divide-gray-200 bg-white rounded shadow overflow-hidden">
                 {users.map((user) => (
-                  <li
-                    key={user.id}
-                    className="px-6 py-4 flex justify-between items-center"
-                  >
+                  <li key={user.id} className="px-6 py-4 flex justify-between items-center">
                     <div>
                       <p className="font-semibold text-yellow-900">{user.name}</p>
                       <p className="text-sm text-gray-600">{user.email}</p>
@@ -198,9 +221,7 @@ export default function AdminDashboard({
 
         {activeMenu === "messages" && (
           <section>
-            <h2 className="text-2xl font-bold mb-6 border-b border-yellow-700 pb-2">
-              Messages
-            </h2>
+            <h2 className="text-2xl font-bold mb-6 border-b border-yellow-700 pb-2">Messages</h2>
             {messages.length === 0 ? (
               <p className="text-gray-600">No messages found.</p>
             ) : (
@@ -227,20 +248,15 @@ export default function AdminDashboard({
 
         {activeMenu === "cart" && (
           <section>
-            <h2 className="text-2xl font-bold mb-6 border-b border-yellow-700 pb-2">
-              Cart Overview
-            </h2>
+            <h2 className="text-2xl font-bold mb-6 border-b border-yellow-700 pb-2">Cart Overview</h2>
             {cartItems.length === 0 ? (
               <p className="text-gray-600">Your cart is empty.</p>
             ) : (
               <ul className="space-y-3 bg-white rounded shadow p-5">
                 {cartItems.map((item, idx) => (
-                  <li
-                    key={idx}
-                    className="flex justify-between items-center border-b border-gray-200 pb-2 last:border-b-0"
-                  >
-                    <span className="text-yellow-900 font-semibold">{item.name}</span>
-                    <span>${item.price.toFixed(2)}</span>
+                  <li key={idx} className="flex justify-between items-center border-b border-gray-200 pb-2 last:border-b-0">
+                    <span className="text-yellow-900 font-semibold">{item.title}</span>
+                    <span>€{item.price.toFixed(2)}</span>
                     <button
                       className="text-red-600 hover:text-red-800 ml-4"
                       onClick={() => removeFromCart(idx)}
@@ -261,7 +277,6 @@ export default function AdminDashboard({
 AdminDashboard.noLayout = true;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  // Kontroll sesioni dhe roli i përdoruesit
   const session = await getServerSession(context.req, context.res, authOptions);
 
   if (!session || !session.user || session.user.role !== "admin") {
@@ -273,7 +288,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  // Merr të dhënat nga DB
   const [usersRaw, productsRaw, messagesRaw, productCount] = await Promise.all([
     getAllUsers(),
     getAllProducts(),
@@ -281,7 +295,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     getTotalProducts(),
   ]);
 
-  // Procesimi i përdoruesve
   const users = Array.isArray(usersRaw)
     ? usersRaw.map((user: any) => ({
         id: user.id?.toString() ?? "",
@@ -291,20 +304,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       }))
     : [];
 
-  // Procesimi i produkteve
   const products = Array.isArray(productsRaw)
-    ? productsRaw
-        .filter((prod: any) => prod && prod.id && prod.title) // në kodin tënd produktet kanë 'title' jo 'name'
-        .map((prod: any) => ({
-          id: prod.id.toString(),
-          title: prod.title ?? "",
-          body: prod.body ?? "",
-          image: prod.image ?? "",
-          price: Number(prod.price) || 0,
-        }))
+    ? productsRaw.map((prod: any) => ({
+        id: prod.id.toString(),
+        title: prod.title ?? "",
+        body: prod.body ?? "",
+        image: prod.image ?? "",
+        price: Number(prod.price) || 0,
+      }))
     : [];
 
-  // Procesimi i mesazheve
   const messages = Array.isArray(messagesRaw)
     ? messagesRaw.map((msg: any) => ({
         id: msg.id?.toString() ?? "",
