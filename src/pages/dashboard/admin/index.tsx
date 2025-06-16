@@ -58,6 +58,7 @@ export default function AdminDashboard({
   const [activeMenu, setActiveMenu] = useState<
     "dashboard" | "products" | "users" | "messages" | "cart" | "events"
   >("dashboard");
+
   const [cartItems, setCartItems] = useState<Product[]>([]);
 
   const addToCart = (product: Product) => {
@@ -185,6 +186,14 @@ export default function AdminDashboard({
                       >
                         Delete
                       </button>
+
+                      {/* Butoni për shtimin në Cart */}
+                      <button
+                        onClick={() => addToCart(product)}
+                        className="px-4 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition"
+                      >
+                        Add to Cart
+                      </button>
                     </div>
                   </li>
                 ))}
@@ -192,57 +201,86 @@ export default function AdminDashboard({
             )}
           </section>
         )}
-{activeMenu === "users" && (
-  <section>
-    <h2 className="text-2xl font-bold mb-6 border-b border-yellow-700 pb-2">Users</h2>
-    {users.length === 0 ? (
-      <p className="text-gray-600">No users found.</p>
-    ) : (
-      <ul className="space-y-6">
-        {users.map((user) => (
-          <li
-            key={user.id}
-            className="bg-white rounded-lg shadow p-5 flex flex-col sm:flex-row sm:justify-between sm:items-center"
-          >
-            <div>
-              <h3 className="text-lg font-semibold text-yellow-900">{user.name}</h3>
-              <p className="text-gray-600">{user.email}</p>
-              <p className="text-sm text-gray-500">Role: {user.role}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
-    )}
-  </section>
-)}
 
-{activeMenu === "messages" && (
-  <section>
-    <h2 className="text-2xl font-bold mb-6 border-b border-yellow-700 pb-2">Messages</h2>
-    {messages.length === 0 ? (
-      <p className="text-gray-600">No messages found.</p>
-    ) : (
-      <ul className="space-y-6">
-        {messages.map((msg) => (
-          <li
-            key={msg.id}
-            className="bg-white rounded-lg shadow p-5 flex flex-col sm:flex-row sm:justify-between sm:items-start"
-          >
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold text-yellow-900">{msg.name}</h3>
-              <p className="text-gray-600">{msg.email}</p>
-              <p className="text-gray-700 mt-2">{msg.message}</p>
-              <p className="text-sm text-gray-500 mt-2">
-                Sent: {new Date(msg.createdAt).toLocaleString()}
-              </p>
-            </div>
-          </li>
-        ))}
-      </ul>
-    )}
-  </section>
-  
-)}
+        {activeMenu === "users" && (
+          <section>
+            <h2 className="text-2xl font-bold mb-6 border-b border-yellow-700 pb-2">Users</h2>
+            {users.length === 0 ? (
+              <p className="text-gray-600">No users found.</p>
+            ) : (
+              <ul className="space-y-6">
+                {users.map((user) => (
+                  <li
+                    key={user.id}
+                    className="bg-white rounded-lg shadow p-5 flex flex-col sm:flex-row sm:justify-between sm:items-center"
+                  >
+                    <div>
+                      <h3 className="text-lg font-semibold text-yellow-900">{user.name}</h3>
+                      <p className="text-gray-600">{user.email}</p>
+                      <p className="text-sm text-gray-500">Role: {user.role}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        )}
+
+        {activeMenu === "messages" && (
+          <section>
+            <h2 className="text-2xl font-bold mb-6 border-b border-yellow-700 pb-2">Messages</h2>
+            {messages.length === 0 ? (
+              <p className="text-gray-600">No messages found.</p>
+            ) : (
+              <ul className="space-y-6">
+                {messages.map((msg) => (
+                  <li
+                    key={msg.id}
+                    className="bg-white rounded-lg shadow p-5 flex flex-col sm:flex-row sm:justify-between sm:items-start"
+                  >
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-yellow-900">{msg.name}</h3>
+                      <p className="text-gray-600">{msg.email}</p>
+                      <p className="text-gray-700 mt-2">{msg.message}</p>
+                      <p className="text-sm text-gray-500 mt-2">
+                        Sent: {new Date(msg.createdAt).toLocaleString()}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        )}
+
+        {activeMenu === "cart" && (
+          <section>
+            <h2 className="text-2xl font-bold mb-6 border-b border-yellow-700 pb-2">Cart Overview</h2>
+            {cartItems.length === 0 ? (
+              <p className="text-gray-600">Cart is empty.</p>
+            ) : (
+              <ul className="space-y-6">
+                {cartItems.map((item, index) => (
+                  <li
+                    key={index}
+                    className="bg-white rounded-lg shadow p-5 flex justify-between items-center"
+                  >
+                    <div>
+                      <h3 className="text-lg font-semibold text-yellow-900">{item.title}</h3>
+                      <p className="text-sm text-gray-500">Price: ${item.price.toFixed(2)}</p>
+                    </div>
+                    <button
+                      onClick={() => removeFromCart(index)}
+                      className="px-4 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition"
+                    >
+                      Remove
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        )}
 
         {activeMenu === "events" && (
           <section>

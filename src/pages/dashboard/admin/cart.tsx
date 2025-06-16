@@ -26,6 +26,10 @@ export default function AdminCart() {
     return <p className="text-center pt-24">Loading...</p>;
   }
 
+  if (session?.user?.role !== "admin") {
+    return null;
+  }
+
   return (
     <div className="pt-24 px-6 pb-12 min-h-screen bg-white">
       <Head><title>Admin Cart | Cake Shop</title></Head>
