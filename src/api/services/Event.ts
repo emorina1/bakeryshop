@@ -1,32 +1,63 @@
 import clientPromise from "@/lib/mongodb";
-import { Event } from "@/api/models/Event";
+import { ObjectId } from "mongodb";
 
-// Krijo event të ri
-export async function createEvent(data: Event) {
-  const client = await clientPromise;
-  const db = client.db("bakerydb");
-
-  const { _id, ...rest } = data;
-  void _id; // për të injoruar nëse vjen me ID
-
-  const result = await db.collection("events").insertOne({
-    ...rest,
-    createdAt: new Date(),
-  });
-
-  return result;
+export interface Event {
+  _id?: string;
+  title: string;
+  description: string;
+  imageUrls: string[];
+  createdAt?: string;
 }
 
-// Merr të gjitha eventet
-export async function getAllEvents() {
+export async function createEvent(data: Omit<Event, "_id" | "createdAt">): Promise<Event> {
   const client = await clientPromise;
   const db = client.db("bakerydb");
 
-  const events = await db
-    .collection("events")
-    .find()
-    .sort({ createdAt: -1 })
-    .toArray();
+  const createdAt = new Date();
 
-  return events;
+  const result = await db.collection("events").insertOne({
+    ...data,
+    createdAt,
+  });
+
+  return {
+    _id: result.insertedId.toHexString(),
+    ...data,
+    createdAt: createdAt.toISOString(),
+  };
+}
+
+export async function getAllEvents(): Promise<Event[]> {
+  const client = await clientPromise;
+  const db = client.db("bakerydb");
+
+  const events = await db.collection("events").find().sort({ createdAt: -1 }).toArray();
+
+  return events.map((e) => ({
+    _id: e._id.toHexString(),
+    title: e.title,
+    description: e.description,
+    imageUrls: e.imageUrls,
+    createdAt: typeof e.createdAt === "string" ? e.createdAt : e.createdAt.toISOString(),
+  }));
+}
+
+export async function updateEvent(id: string, data: Omit<Event, "_id" | "createdAt">): Promise<boolean> {
+  const client = await clientPromise;
+  const db = client.db("bakerydb");
+
+  const result = await db.collection("events").updateOne(
+    { _id: new ObjectId(id) },
+    { $set: data }
+  );
+
+  return result.modifiedCount === 1;
+}
+
+export async function deleteEvent(id: string): Promise<boolean> {
+  const client = await clientPromise;
+  const db = client.db("bakerydb");
+
+  const result = await db.collection("events").deleteOne({ _id: new ObjectId(id) });
+  return result.deletedCount === 1;
 }

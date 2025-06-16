@@ -132,7 +132,117 @@ export default function AdminDashboard({
           </section>
         )}
 
-        {/* ... Existing sections for products, users, messages, cart ... */}
+        {activeMenu === "products" && (
+          <section>
+            <h2 className="text-2xl font-bold mb-6 border-b border-yellow-700 pb-2">Products</h2>
+            <div className="mb-6 text-right">
+              <button
+                onClick={() => (window.location.href = "/create/product")}
+                className="bg-green-700 text-white px-5 py-2 rounded-md hover:bg-green-800 transition"
+              >
+                + Create Product
+              </button>
+            </div>
+
+            {products.length === 0 ? (
+              <p className="text-gray-600">No products found.</p>
+            ) : (
+              <ul className="space-y-6">
+                {products.map((product) => (
+                  <li
+                    key={product.id}
+                    className="bg-white rounded-lg shadow p-5 flex flex-col sm:flex-row sm:justify-between sm:items-center"
+                  >
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-yellow-900">{product.title}</h3>
+                      <p className="text-gray-600">{product.body}</p>
+                      <p className="text-sm text-gray-500">Price: ${product.price.toFixed(2)}</p>
+                    </div>
+
+                    <div className="flex flex-col gap-2 mt-4 sm:mt-0 sm:ml-6">
+                      <button
+                        onClick={() => (window.location.href = `/update/product/${product.id}`)}
+                        className="px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                      >
+                        Update
+                      </button>
+                      <button
+                        onClick={async () => {
+                          const confirmed = confirm("Are you sure you want to delete this product?");
+                          if (!confirmed) return;
+
+                          const res = await fetch(`/api/products/${product.id}`, {
+                            method: "DELETE",
+                          });
+
+                          if (res.ok) {
+                            window.location.reload();
+                          } else {
+                            alert("Failed to delete the product.");
+                          }
+                        }}
+                        className="px-4 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        )}
+{activeMenu === "users" && (
+  <section>
+    <h2 className="text-2xl font-bold mb-6 border-b border-yellow-700 pb-2">Users</h2>
+    {users.length === 0 ? (
+      <p className="text-gray-600">No users found.</p>
+    ) : (
+      <ul className="space-y-6">
+        {users.map((user) => (
+          <li
+            key={user.id}
+            className="bg-white rounded-lg shadow p-5 flex flex-col sm:flex-row sm:justify-between sm:items-center"
+          >
+            <div>
+              <h3 className="text-lg font-semibold text-yellow-900">{user.name}</h3>
+              <p className="text-gray-600">{user.email}</p>
+              <p className="text-sm text-gray-500">Role: {user.role}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+)}
+
+{activeMenu === "messages" && (
+  <section>
+    <h2 className="text-2xl font-bold mb-6 border-b border-yellow-700 pb-2">Messages</h2>
+    {messages.length === 0 ? (
+      <p className="text-gray-600">No messages found.</p>
+    ) : (
+      <ul className="space-y-6">
+        {messages.map((msg) => (
+          <li
+            key={msg.id}
+            className="bg-white rounded-lg shadow p-5 flex flex-col sm:flex-row sm:justify-between sm:items-start"
+          >
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-yellow-900">{msg.name}</h3>
+              <p className="text-gray-600">{msg.email}</p>
+              <p className="text-gray-700 mt-2">{msg.message}</p>
+              <p className="text-sm text-gray-500 mt-2">
+                Sent: {new Date(msg.createdAt).toLocaleString()}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+  
+)}
 
         {activeMenu === "events" && (
           <section>

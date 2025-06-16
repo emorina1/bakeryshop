@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import bakeryImg from "@/assets/ourstory.jpg";
 import teamImg from "@/assets/beautiful-girls-buys-buns-bakery.jpg";
-import worker1 from "@/assets/elsu.jpg";
+import worker1 from "@/assets/male.jpg";
 import worker2 from "@/assets/smiling-male-baker-holding-loaf-showing-ok-hand-sign-gesture.jpg";
 import worker3 from "@/assets/medium-shot-smiley-woman-holding-tray.jpg";
 import worker4 from "@/assets/front-view-smiley-woman-kitchen.jpg";
@@ -18,11 +18,12 @@ const fadeInUp = {
 };
 
 const workers = [
-  { name: "Elsa Morina", role: "Owner Baker", image: worker1 },
-  { name: "Doni Krasniqi", role: "Pastry Chef", image: worker2 },
-  { name: "Lira Beqiri", role: "Dough Specialist", image: worker3 },
-  { name: "Arta Dushi", role: "Cake Designer", image: worker4 },
+  { name: "Oli Carter", role: "Bakery Chef", image: worker1 },
+  { name: "Daniel Brooks", role: "Pastry Chef", image: worker2 },
+  { name: "Emma Reed", role: "Dough Specialist", image: worker3 },
+  { name: "Sophia Bennett", role: "Cake Designer", image: worker4 },
 ];
+
 
 export default function MeetOurBakers() {
   return (
@@ -140,14 +141,7 @@ export default function MeetOurBakers() {
         </div>
 
         {/* BUTTON */}
-        <div className="text-center mt-16">
-          <a
-            href="/staff"
-            className="inline-block bg-[#eac49f] hover:bg-[#d29b72] text-[#4a2e21] font-semibold py-3 px-8 rounded-xl transition-all shadow-md hover:shadow-lg"
-          >
-            Visit Us
-          </a>
-        </div>
+        
       </div>
     </motion.section>
   );
