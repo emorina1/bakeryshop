@@ -8,6 +8,24 @@ import { getAllEvents } from "@/api/services/Event";
 import { useState } from "react";
 import { FiLogOut } from "react-icons/fi";
 import { signOut } from "next-auth/react";
+import BreadImg from "@/assets/basket-bread-rolling-pin-removebg-preview.png";
+import UsersImg from "@/assets/portrait-bakery-seller-with-arms-crossed-standing-front-shelf-full-bred-bagels-pastry.png";
+import MsgImg from "@/assets/qg35_ziuy_221114-removebg-preview.png";
+
+
+
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+} from "recharts";
 
 type User = {
   id: string;
@@ -72,6 +90,19 @@ export default function AdminDashboard({
   const handleLogout = () => {
     signOut({ callbackUrl: "/sign-in" });
   };
+    const barData = [
+    { name: "Whole Wheat", products: productCount },
+    { name: "Users", products: users.length },
+    { name: "Messages", products: messages.length },
+  ];
+
+  const pieData = [
+    { name: "Products", value: productCount },
+    { name: "Users", value: users.length },
+    { name: "Messages", value: messages.length },
+  ];
+  const COLORS = ["#FF8042", "#FFBB28", "#0088FE"];
+  
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -112,26 +143,122 @@ export default function AdminDashboard({
         </button>
       </aside>
 
-      <main className="flex-1 p-10 overflow-y-auto">
-        {activeMenu === "dashboard" && (
-          <section>
-            <h2 className="text-2xl font-bold mb-6 border-b border-yellow-700 pb-2">Dashboard Overview</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-              <div className="bg-white p-6 rounded-lg shadow-md text-center">
-                <p className="text-xl font-semibold text-yellow-900">{productCount}</p>
-                <p className="text-gray-600 mt-1">Total Products</p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-md text-center">
-                <p className="text-xl font-semibold text-yellow-900">{users.length}</p>
-                <p className="text-gray-600 mt-1">Total Users</p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-md text-center">
-                <p className="text-xl font-semibold text-yellow-900">{messages.length}</p>
-                <p className="text-gray-600 mt-1">Total Messages</p>
-              </div>
-            </div>
-          </section>
-        )}
+      <main className="flex-1 p-10 overflow-y-auto bg-gradient-to-br from-amber-100 via-yellow-50 to-stone-100">
+  {activeMenu === "dashboard" && (
+    <section>
+      <h2 className="text-3xl font-bold mb-8 text-amber-800">Welcome, Admin</h2>
+
+      {/* ===== Cards ===== */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Card 1 */}
+        <div className="relative rounded-3xl overflow-hidden shadow-xl group transform hover:scale-105 transition-transform duration-500 bg-stone-200">
+          <img src={BreadImg.src} alt="Whole Wheat" className="w-full h-56 object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-stone-800/70 via-stone-700/30 to-transparent p-6 flex flex-col justify-end">
+            <p className="text-white text-2xl font-bold">Product</p>
+            <p className="text-amber-200 text-sm mt-2">Total Products: {productCount}</p>
+          </div>
+        </div>
+
+        {/* Card 2 */}
+        <div className="relative rounded-3xl overflow-hidden shadow-xl group transform hover:scale-105 transition-transform duration-500 bg-stone-200">
+          <img src={UsersImg.src} alt="Users" className="w-full h-56 object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-stone-800/70 via-stone-700/30 to-transparent p-6 flex flex-col justify-end">
+            <p className="text-white text-2xl font-bold">Users</p>
+            <p className="text-amber-200 text-sm mt-2">Total Users: {users.length}</p>
+          </div>
+        </div>
+
+        {/* Card 3 */}
+        <div className="relative rounded-3xl overflow-hidden shadow-xl group transform hover:scale-105 transition-transform duration-500 bg-stone-200">
+          <img src={MsgImg.src} alt="Messages" className="w-full h-56 object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-stone-800/70 via-stone-700/30 to-transparent p-6 flex flex-col justify-end">
+            <p className="text-white text-2xl font-bold">Messages</p>
+            <p className="text-amber-200 text-sm mt-2">Total Messages: {messages.length}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* ===== Charts ===== */}
+      <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div className="bg-stone-50 rounded-2xl shadow-md p-6 border border-amber-200">
+          <h3 className="text-xl font-semibold mb-4 text-amber-800">Overview Bar Chart</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={barData}>
+              <XAxis dataKey="name" stroke="#D97706" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="products" fill="#D97706" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="bg-stone-50 rounded-2xl shadow-md p-6 border border-amber-200">
+          <h3 className="text-xl font-semibold mb-4 text-amber-800">Distribution Pie Chart</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <PieChart>
+              <Pie
+                data={pieData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={80}
+                label
+              >
+                {pieData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={["#D97706", "#FBBF24", "#A16207"][index % 3]} />
+                ))}
+              </Pie>
+              <Legend />
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* ===== Extra Section ===== */}
+      <div className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Upcoming Event */}
+        <div className="bg-gradient-to-r from-amber-200 via-yellow-100 to-stone-100 p-6 rounded-2xl shadow-md border-l-4 border-amber-500">
+          <h4 className="text-xl font-semibold text-amber-800 mb-2">Upcoming Event</h4>
+          <p className="text-stone-700">
+            {events.length > 0
+              ? `${events[0].title} – ${new Date(events[0].date).toLocaleDateString()}`
+              : "No upcoming events"}
+          </p>
+        </div>
+
+        {/* Recent Messages */}
+        <div className="bg-white p-6 rounded-2xl shadow-md">
+          <h4 className="text-lg font-bold text-amber-800 mb-4">Latest Messages</h4>
+          <ul className="space-y-3 max-h-48 overflow-y-auto pr-2">
+            {messages.slice(0, 5).map((msg) => (
+              <li key={msg.id} className="border-b pb-2 text-sm text-stone-700">
+                <strong>{msg.name}:</strong> {msg.message.slice(0, 50)}...
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Progress bar */}
+        <div className="bg-white p-6 rounded-2xl shadow-md">
+          <h4 className="text-lg font-bold text-amber-800 mb-4">Stock Progress</h4>
+          <p className="text-stone-700 mb-2">Whole Wheat Bread</p>
+          <div className="w-full bg-amber-100 rounded-full h-4">
+            <div
+              className="bg-amber-500 h-4 rounded-full transition-all duration-500"
+              style={{ width: `${Math.min((productCount / 100) * 100, 100)}%` }}
+            ></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+
+
+       
+
+
 
         {activeMenu === "products" && (
           <section>
